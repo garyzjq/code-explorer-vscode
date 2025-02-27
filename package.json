@@ -1,16 +1,16 @@
 {
-  "name": "code-explorer",
-  "displayName": "Code Explorer",
+  "name": "code-explorer-internal",
+  "displayName": "Code Explorer Internal",
   "description": "Mark code call chain into a stack and switching among them.",
-  "version": "0.4.5",
+  "version": "0.4.10",
   "license": "MIT",
   "repository": {
-    "url": "https://github.com/tianjianchn/code-explorer-vscode"
+    "url": "https://github.com/garyzjq/code-explorer-vscode"
   },
   "engines": {
     "vscode": "^1.81.0"
   },
-  "publisher": "tianjianchn",
+  "publisher": "CodeExplorerInternal",
   "categories": [
     "Other"
   ],
@@ -155,6 +155,24 @@
         "enablement": "view == codeExplorer.stackView"
       },
       {
+        "command": "codeExplorer.stackView.unindentToTop",
+        "title": "Unindent to Top",
+        "category": "Code Explorer",
+        "enablement": "view == codeExplorer.stackView"
+      },
+      {
+        "command": "codeExplorer.stackView.indentToSameLevelWithAbove",
+        "title": "Indent to Sibling",
+        "category": "Code Explorer",
+        "enablement": "view == codeExplorer.stackView"
+      },
+      {
+        "command": "codeExplorer.stackView.indentToNextLevelWithAbove",
+        "title": "Indent to Child",
+        "category": "Code Explorer",
+        "enablement": "view == codeExplorer.stackView"
+      },
+      {
         "command": "codeExplorer.stackView.copyMarker",
         "title": "Copy",
         "category": "Code Explorer",
@@ -271,6 +289,11 @@
           "group": "0"
         },
         {
+          "command": "codeExplorer.createStack",
+          "when": "view == codeExplorer.stackView && viewItem == stack",
+          "group": "0"
+        },
+        {
           "command": "codeExplorer.renameStack",
           "when": "view == codeExplorer.stackView && viewItem == stack",
           "group": "1"
@@ -332,6 +355,21 @@
         },
         {
           "command": "codeExplorer.stackView.unindentMarker",
+          "when": "view == codeExplorer.stackView && viewItem =~ /^marker/",
+          "group": "5"
+        },
+        {
+          "command": "codeExplorer.stackView.indentToSameLevelWithAbove",
+          "when": "view == codeExplorer.stackView && viewItem =~ /^marker/",
+          "group": "5"
+        },
+        {
+          "command": "codeExplorer.stackView.indentToNextLevelWithAbove",
+          "when": "view == codeExplorer.stackView && viewItem =~ /^marker/",
+          "group": "5"
+        },
+        {
+          "command": "codeExplorer.stackView.unindentToTop",
           "when": "view == codeExplorer.stackView && viewItem =~ /^marker/",
           "group": "5"
         },

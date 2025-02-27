@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import nodePath from 'path';
 import crypto from 'crypto';
+import { Marker, Stack } from './markerService';
 
 export function uuid() {
   return crypto.randomBytes(16).toString('hex');
@@ -52,6 +53,16 @@ export function getRelativeFilePath(fullPath: string) {
   }
 
   return fullPath;
+}
+
+export function findAboveMarker(stacks: Stack[], marker: Marker): Marker | null {
+  for (const stack of stacks) {
+    const index = stack.markers.indexOf(marker);
+    if (index > 0) {
+      return stack.markers[index - 1];
+    }
+  }
+  return null;
 }
 
 export class Future<T = void> {

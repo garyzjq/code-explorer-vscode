@@ -10,6 +10,8 @@ import {
   uuid,
 } from './util';
 import { output } from './output';
+import { findAboveMarker } from './util';
+
 
 export interface Marker {
   id: string;
@@ -270,13 +272,46 @@ class MarkerService {
     );
   }
 
-  private getMarker(markerId: string) {
+  getMarker(markerId: string) {
     for (let ii = 0; ii < this.stacks.length; ++ii) {
       const stack = this.stacks[ii];
       const marker = stack.markers.find((m) => m.id === markerId);
       if (marker) return marker;
     }
     return null;
+  }
+
+  async indentToSameLevelWithAbove(markerId: string) {
+    const marker = this.getMarker(markerId);
+    if (!marker) return;
+  
+    const aboveMarker = findAboveMarker(this.stacks, marker);
+    if (!aboveMarker) return;
+  
+    marker.indent = aboveMarker.indent;
+  
+    await this.saveData();
+  }
+  
+  async indentToNextLevelWithAbove(markerId: string) {
+    const marker = this.getMarker(markerId);
+    if (!marker) return;
+  
+    const aboveMarker = findAboveMarker(this.stacks, marker);
+    if (!aboveMarker) return;
+  
+    marker.indent = (aboveMarker.indent ?? 0) + 1;
+  
+    await this.saveData();
+  }
+
+  async unindentToTop(markerId: string) {
+    const marker = this.getMarker(markerId);
+    if (!marker) return;
+  
+    marker.indent = 0;
+  
+    await this.saveData();
   }
 
   async reposition(markerId: string, line: number, column?: number) {

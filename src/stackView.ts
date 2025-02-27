@@ -256,6 +256,33 @@ export class MarkerTreeViewProvider
     );
 
     vscode.commands.registerCommand(
+      'codeExplorer.stackView.indentToSameLevelWithAbove',
+      async (el?: TreeElement) => {
+        if (!el || el.type !== 'marker') return;
+    
+        await markerService.indentToSameLevelWithAbove(el.marker.id);
+      }
+    );
+    
+    vscode.commands.registerCommand(
+      'codeExplorer.stackView.indentToNextLevelWithAbove',
+      async (el?: TreeElement) => {
+        if (!el || el.type !== 'marker') return;
+    
+        await markerService.indentToNextLevelWithAbove(el.marker.id);
+      }
+    );
+    
+    vscode.commands.registerCommand(
+      'codeExplorer.stackView.unindentToTop',
+      async (el?: TreeElement) => {
+        if (!el || el.type !== 'marker') return;
+    
+        await markerService.unindentToTop(el.marker.id);
+      }
+    );
+
+    vscode.commands.registerCommand(
       'codeExplorer.stackView.copyMarker',
       async (el?: TreeElement) => {
         if (!el || el.type !== 'marker') return;
@@ -697,10 +724,22 @@ export class MarkerTreeViewProvider
     } else if (srcElType === 'stack') {
       markerService.moveStack(srcEl.stack.id, targetId, targetType);
     } else if (srcElType === 'marker') {
+      if (targetType === 'marker') {
+        if (targetType === 'marker') {
+          const srcMarker = srcEl.marker;
+          const targetMarker = markerService.getMarker(targetId);
+          if (targetMarker) {
+            srcMarker.indent = (targetMarker.indent ?? 0) + 1;
+          }
+        }
+      }
       markerService.moveMarker(srcEl.marker.id, targetId, targetType);
     } else {
       const exhaustedType: never = srcElType;
       throw new Error('Unknown element: ' + exhaustedType);
     }
   }
+
+
+  
 }
